@@ -83,6 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
+  /**
+   * Sanitiza a entrada de texto removendo caracteres especiais de controle de caminho
+   * @param {string} texto Texto bruto inserido pelo usuário
+   * @returns {string} Texto limpo
+   */
+  function limparTextoBusca(texto) {
+    return texto.replace(/[\\\/.]/g, '').trim();
+  }
+
   // --- BUSCA POR CEP ---
 
   // Aplica máscara automática de CEP (XXXXX-XXX) e gerencia buscas automáticas
@@ -120,6 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
    * @param {string} cep CEP apenas com números (8 dígitos)
    */
   async function consultarCep(cep) {
+    // Validação estrita contra injeção de parâmetros/formatos inválidos
+    if (!/^\d{8}$/.test(cep)) {
+      mostrarErroCep('CEP inválido. Digite 8 números.');
+      return;
+    }
+
     mostrarLoadingCep(true);
     ocultarErroCep();
     ocultarResultadosCep();
@@ -214,14 +229,28 @@ document.addEventListener('DOMContentLoaded', () => {
    * Consulta a API ViaCEP utilizando parâmetros de endereço (UF, Cidade e Logradouro)
    */
   async function consultarEndereco(uf, cidade, logradouro) {
+    // Limpeza de caracteres potencialmente perigosos para injeção de caminhos
+    const ufLimpa = uf.trim();
+    const cidadeLimpa = limparTextoBusca(cidade);
+    const logradouroLimpo = limparTextoBusca(logradouro);
+
+    // Validação defensiva de segurança
+    if (!/^[A-Z]{2}$/.test(ufLimpa)) {
+      mostrarErroEndereco('UF inválida.');
+      return;
+    }
+    if (cidadeLimpa.length < 3 || logradouroLimpo.length < 3) {
+      return;
+    }
+
     mostrarLoadingEndereco(true);
     ocultarErroEndereco();
     ocultarResultadosEndereco();
 
     try {
-      const ufSanitizada = encodeURIComponent(uf);
-      const cidadeSanitizada = encodeURIComponent(cidade);
-      const logradouroSanitizado = encodeURIComponent(logradouro);
+      const ufSanitizada = encodeURIComponent(ufLimpa);
+      const cidadeSanitizada = encodeURIComponent(cidadeLimpa);
+      const logradouroSanitizado = encodeURIComponent(logradouroLimpo);
 
       const response = await fetch(`https://viacep.com.br/ws/${ufSanitizada}/${cidadeSanitizada}/${logradouroSanitizado}/json/`);
       
@@ -265,8 +294,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderizarListaEnderecos(lista) {
-    // Limpa a lista anterior de resultados
-    enderecoResultsList.innerHTML = '';
+    // Limpa a lista anterior de resultados de forma segura (sem usar innerHTML)
+    enderecoResultsList.replaceChildren();
 
     // Renderiza cada item da lista gerando elementos de forma segura (DOM APIs)
     lista.forEach(item => {
@@ -279,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function ocultarResultadosEndereco() {
     enderecoResult.classList.remove('active');
-    enderecoResultsList.innerHTML = '';
+    enderecoResultsList.replaceChildren();
   }
 
   /**

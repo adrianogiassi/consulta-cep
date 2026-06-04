@@ -190,8 +190,9 @@ body {
 /* Grid de Form para Busca por Endereço */
 .address-form-grid {
   display: grid;
-  grid-template-columns: 80px 1fr;
+  grid-template-columns: 110px 1fr;
   gap: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 @media (max-width: 480px) {
