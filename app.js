@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resCidade = document.getElementById('res-cidade');
   const resUf = document.getElementById('res-uf');
   const btnCopyCep = document.getElementById('btn-copy-cep');
+  const btnClearCep = document.getElementById('btn-clear-cep');
 
   // Elementos do Fluxo de Endereço
   const ufSelect = document.getElementById('uf-select');
@@ -98,6 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
   cepInput.addEventListener('input', (e) => {
     let value = e.target.value.replace(/\D/g, ''); // Mantém apenas números
     
+    // Controla a visibilidade do botão de limpar
+    if (value.length > 0) {
+      cepWrapper.classList.add('has-value');
+    } else {
+      cepWrapper.classList.remove('has-value');
+    }
+
     // Insere o hífen após o 5º dígito
     if (value.length > 5) {
       value = value.replace(/^(\d{5})(\d)/, '$1-$2');
@@ -117,6 +125,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Dispara a busca quando o CEP estiver completo (8 dígitos)
     if (cepLimpo.length === 8) {
       buscarCepDebounced(cepLimpo);
+    }
+  });
+
+  // Limpa o campo de CEP e redefine o estado da aplicação
+  btnClearCep.addEventListener('click', () => {
+    cepInput.value = '';
+    cepWrapper.classList.remove('has-value');
+    ocultarResultadosCep();
+    ocultarErroCep();
+    cepInput.focus();
+  });
+
+  // Auto-seleciona o texto ao focar (facilita consultas subsequentes rápidas)
+  cepInput.addEventListener('focus', () => {
+    if (cepInput.value.length > 0) {
+      cepInput.select();
     }
   });
 

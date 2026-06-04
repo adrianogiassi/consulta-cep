@@ -263,6 +263,44 @@ input::placeholder {
   display: block;
 }
 
+/* Botão de Limpar (Clear Input) */
+.btn-clear {
+  position: absolute;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  outline: none;
+  padding: 0;
+}
+
+.btn-clear:hover {
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.btn-clear:focus-visible {
+  outline: 2px solid var(--border-focus);
+}
+
+.cep-input-wrapper.has-value .btn-clear {
+  display: flex;
+}
+
+.cep-input-wrapper.loading .btn-clear {
+  display: none !important;
+}
+
 /* Feedbacks Visuais Globais */
 .status-message {
   margin-top: 1.25rem;
@@ -274,7 +312,7 @@ input::placeholder {
 }
 
 .status-message.error {
-  display: flex;
+  display: none; /* Inicia oculto para evitar o bug do ícone vermelho no carregamento inicial */
   align-items: center;
   gap: 0.75rem;
   background-color: var(--color-error-light);
