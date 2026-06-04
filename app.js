@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnTabEndereco = document.getElementById('btn-tab-endereco');
   const tabCep = document.getElementById('tab-cep');
   const tabEndereco = document.getElementById('tab-endereco');
+  const btnThemeToggle = document.getElementById('btn-theme-toggle');
 
   // Elementos do Fluxo de CEP
   const cepInput = document.getElementById('cep-input');
@@ -39,6 +40,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const logradouroWrapper = document.getElementById('logradouro-wrapper');
   const btnClearCidade = document.getElementById('btn-clear-cidade');
   const btnClearLogradouro = document.getElementById('btn-clear-logradouro');
+
+  // --- CONTROLE DE TEMA (CLARO/ESCURO) ---
+  
+  // Recupera o tema do localStorage ou prefere a configuração do sistema
+  const temaSalvo = localStorage.getItem('theme');
+  const prefereEscuro = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (temaSalvo === 'dark' || (!temaSalvo && prefereEscuro)) {
+    document.body.classList.add('dark');
+  }
+
+  btnThemeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    
+    // Salva a nova preferência
+    if (document.body.classList.contains('dark')) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  });
 
   // --- LÓGICA DE ABAS ---
   
