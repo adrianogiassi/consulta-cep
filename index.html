@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ferramenta moderna e otimizada de consulta de CEP e endereços utilizando a API ViaCEP. Desenvolvido com foco em usabilidade e performance.">
+  <title>Consulta CEP & Endereços</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="app-container">
+    
+    <!-- Cabeçalho Principal -->
+    <header class="app-header">
+      <h1>Consulta CEP</h1>
+      <p>Busca instantânea de CEPs e endereços integrados via API aberta</p>
+    </header>
+
+    <!-- Card de Consulta -->
+    <section class="card">
+      
+      <!-- Abas de Navegação -->
+      <nav class="tabs" role="tablist">
+        <button id="btn-tab-cep" class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-cep">
+          Buscar por CEP
+        </button>
+        <button id="btn-tab-endereco" class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-endereco">
+          Buscar por Endereço
+        </button>
+      </nav>
+
+      <!-- Painel: Busca por CEP -->
+      <div id="tab-cep" class="tab-content active" role="tabpanel" aria-labelledby="btn-tab-cep">
+        <div class="form-group last">
+          <label for="cep-input">Digite o CEP</label>
+          <div class="cep-input-wrapper" id="cep-wrapper">
+            <input type="text" id="cep-input" maxlength="9" placeholder="00000-000" autocomplete="off" aria-label="Código de Endereçamento Postal">
+            <div class="input-spinner" aria-label="Carregando"></div>
+          </div>
+        </div>
+
+        <!-- Mensagens de Erro/Status -->
+        <div id="cep-error" class="status-message error">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+          <span id="cep-error-text"></span>
+        </div>
+
+        <!-- Resultados da Busca por CEP -->
+        <div id="cep-result" class="result-section">
+          <div class="result-card">
+            <div class="result-card-header">
+              <span class="result-cep" id="res-cep-value">00000-000</span>
+              <button id="btn-copy-cep" class="btn-copy" aria-label="Copiar CEP">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copiar</span>
+              </button>
+            </div>
+            <div class="result-grid">
+              <div class="data-item">
+                <span class="data-label">Logradouro / Rua</span>
+                <span class="data-value" id="res-logradouro">-</span>
+              </div>
+              <div class="data-item">
+                <span class="data-label">Bairro</span>
+                <span class="data-value" id="res-bairro">-</span>
+              </div>
+              <div class="data-item">
+                <span class="data-label">Cidade</span>
+                <span class="data-value" id="res-cidade">-</span>
+              </div>
+              <div class="data-item">
+                <span class="data-label">Estado (UF)</span>
+                <span class="data-value" id="res-uf">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Painel: Busca por Endereço -->
+      <div id="tab-endereco" class="tab-content" role="tabpanel" aria-labelledby="btn-tab-endereco">
+        
+        <!-- Formulário de Endereço -->
+        <div class="form-group">
+          <label for="uf-select">Estado (UF)</label>
+          <select id="uf-select" aria-label="Selecionar Estado">
+            <option value="" disabled selected>Selecione...</option>
+            <option value="AC">Acre (AC)</option>
+            <option value="AL">Alagoas (AL)</option>
+            <option value="AP">Amapá (AP)</option>
+            <option value="AM">Amazonas (AM)</option>
+            <option value="BA">Bahia (BA)</option>
+            <option value="CE">Ceará (CE)</option>
+            <option value="DF">Distrito Federal (DF)</option>
+            <option value="ES">Espírito Santo (ES)</option>
+            <option value="GO">Goiás (GO)</option>
+            <option value="MA">Maranhão (MA)</option>
+            <option value="MT">Mato Grosso (MT)</option>
+            <option value="MS">Mato Grosso do Sul (MS)</option>
+            <option value="MG">Minas Gerais (MG)</option>
+            <option value="PA">Pará (PA)</option>
+            <option value="PB">Paraíba (PB)</option>
+            <option value="PR">Paraná (PR)</option>
+            <option value="PE">Pernambuco (PE)</option>
+            <option value="PI">Piauí (PI)</option>
+            <option value="RJ">Rio de Janeiro (RJ)</option>
+            <option value="RN">Rio Grande do Norte (RN)</option>
+            <option value="RS">Rio Grande do Sul (RS)</option>
+            <option value="RO">Rondônia (RO)</option>
+            <option value="RR">Roraima (RR)</option>
+            <option value="SC">Santa Catarina (SC)</option>
+            <option value="SP">São Paulo (SP)</option>
+            <option value="SE">Sergipe (SE)</option>
+            <option value="TO">Tocantins (TO)</option>
+          </select>
+        </div>
+
+        <div class="address-form-grid">
+          <div class="form-group">
+            <label for="cidade-input">Cidade</label>
+            <input type="text" id="cidade-input" placeholder="Ex: Santos" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="logradouro-input">Logradouro / Rua</label>
+            <input type="text" id="logradouro-input" placeholder="Ex: Conselheiro Nébias" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Mensagens de Erro/Status -->
+        <div id="endereco-error" class="status-message error">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+          <span id="endereco-error-text"></span>
+        </div>
+
+        <!-- Feedback de Loading de Endereço -->
+        <div id="endereco-loading" class="loading-container">
+          <div class="spinner"></div>
+          <span>Buscando endereços compatíveis...</span>
+        </div>
+
+        <!-- Resultados da Busca por Endereço -->
+        <div id="endereco-result" class="result-section">
+          <h3 class="results-header-text" id="endereco-result-title">Endereços Encontrados</h3>
+          <div class="results-list" id="endereco-results-list" role="region" aria-live="polite">
+            <!-- Os endereços serão inseridos dinamicamente aqui -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Rodapé Informativo -->
+    <footer class="app-footer">
+      <p>Ferramenta desenvolvida por Adriano Giassi com o auxílio de Inteligência Artificial para otimização de rotinas operacionais.</p>
+    </footer>
+
+  </main>
+
+  <!-- Lógica JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>
