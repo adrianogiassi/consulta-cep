@@ -293,12 +293,25 @@ input::placeholder {
   outline: 2px solid var(--border-focus);
 }
 
-.cep-input-wrapper.has-value .btn-clear {
+.cep-input-wrapper.has-value .btn-clear,
+.input-wrapper.has-value .btn-clear {
   display: flex;
 }
 
 .cep-input-wrapper.loading .btn-clear {
   display: none !important;
+}
+
+/* Wrapper genérico de Input */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-wrapper input {
+  padding-right: 2.75rem;
 }
 
 /* Feedbacks Visuais Globais */

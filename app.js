@@ -35,6 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const enderecoLoading = document.getElementById('endereco-loading');
   const enderecoResult = document.getElementById('endereco-result');
   const enderecoResultsList = document.getElementById('endereco-results-list');
+  const cidadeWrapper = document.getElementById('cidade-wrapper');
+  const logradouroWrapper = document.getElementById('logradouro-wrapper');
+  const btnClearCidade = document.getElementById('btn-clear-cidade');
+  const btnClearLogradouro = document.getElementById('btn-clear-logradouro');
 
   // --- LÓGICA DE ABAS ---
   
@@ -228,6 +232,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const cidade = cidadeInput.value.trim();
     const logradouro = logradouroInput.value.trim();
 
+    // Controla a visibilidade dos botões de limpar
+    if (cidade.length > 0) {
+      cidadeWrapper.classList.add('has-value');
+    } else {
+      cidadeWrapper.classList.remove('has-value');
+    }
+
+    if (logradouro.length > 0) {
+      logradouroWrapper.classList.add('has-value');
+    } else {
+      logradouroWrapper.classList.remove('has-value');
+    }
+
     // Se o usuário apagar campos essenciais, limpa a tela de resultados
     if (!uf || cidade.length < 3 || logradouro.length < 3) {
       ocultarResultadosEndereco();
@@ -244,6 +261,37 @@ document.addEventListener('DOMContentLoaded', () => {
   ufSelect.addEventListener('change', verificarEBuscarEndereco);
   cidadeInput.addEventListener('input', verificarEBuscarEndereco);
   logradouroInput.addEventListener('input', verificarEBuscarEndereco);
+
+  // Limpa o campo de Cidade e redefine o estado da busca de endereço
+  btnClearCidade.addEventListener('click', () => {
+    cidadeInput.value = '';
+    cidadeWrapper.classList.remove('has-value');
+    ocultarResultadosEndereco();
+    ocultarErroEndereco();
+    cidadeInput.focus();
+  });
+
+  // Limpa o campo de Logradouro e redefine o estado da busca de endereço
+  btnClearLogradouro.addEventListener('click', () => {
+    logradouroInput.value = '';
+    logradouroWrapper.classList.remove('has-value');
+    ocultarResultadosEndereco();
+    ocultarErroEndereco();
+    logradouroInput.focus();
+  });
+
+  // Auto-seleciona o texto ao focar (facilita consultas subsequentes rápidas)
+  cidadeInput.addEventListener('focus', () => {
+    if (cidadeInput.value.length > 0) {
+      cidadeInput.select();
+    }
+  });
+
+  logradouroInput.addEventListener('focus', () => {
+    if (logradouroInput.value.length > 0) {
+      logradouroInput.select();
+    }
+  });
 
   const buscarEnderecoDebounced = debounce((uf, cidade, logradouro) => {
     consultarEndereco(uf, cidade, logradouro);

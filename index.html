@@ -124,13 +124,19 @@
           </div>
           <div class="form-group">
             <label for="cidade-input">Cidade</label>
-            <input type="text" id="cidade-input" placeholder="Ex: São José do Rio Preto" autocomplete="off">
+            <div class="input-wrapper" id="cidade-wrapper">
+              <input type="text" id="cidade-input" placeholder="Ex: São José do Rio Preto" autocomplete="off">
+              <button id="btn-clear-cidade" class="btn-clear" aria-label="Limpar cidade" type="button" tabindex="-1">&times;</button>
+            </div>
           </div>
         </div>
 
         <div class="form-group last">
           <label for="logradouro-input">Logradouro / Rua</label>
-          <input type="text" id="logradouro-input" placeholder="Ex: Avenida Paulista" autocomplete="off">
+          <div class="input-wrapper" id="logradouro-wrapper">
+            <input type="text" id="logradouro-input" placeholder="Ex: Avenida Paulista" autocomplete="off">
+            <button id="btn-clear-logradouro" class="btn-clear" aria-label="Limpar logradouro" type="button" tabindex="-1">&times;</button>
+          </div>
         </div>
 
 
