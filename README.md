@@ -1,47 +1,71 @@
 # Consulta CEP & Endereços
 
-Ferramenta utilitária criada para acelerar fluxos de trabalho através da automação de cadastros. Realiza a consulta instantânea de CEP e validação de endereços direto no sistema via API aberta (ViaCEP), eliminando a necessidade de consultas manuais externas. Um projeto leve, focado em produtividade operacional, performance e segurança de dados.
+Ferramenta utilitária desenvolvida para acelerar fluxos de trabalho através da automação de cadastros de endereços. Realiza a consulta instantânea de CEPs e a validação de logradouros diretamente no sistema via API aberta (ViaCEP), eliminando a necessidade de consultas manuais externas. Um projeto extremamente leve, focado em produtividade operacional, performance, usabilidade e segurança de dados.
+
+## 📸 Demonstração Visual
+
+A interface do sistema possui um design responsivo e moderno (Mobile-First) com suporte a tema claro e escuro dinâmico:
+
+### 🔍 Busca por CEP
+Realiza a consulta automatizada ao preencher os 8 números do CEP, exibindo o endereço completo e permitindo a cópia rápida do CEP para a área de transferência.
+
+![Interface de Busca por CEP](assets/buscaporcep.webp)
+
+---
+
+### 🗺️ Busca por Endereço
+Permite pesquisar o CEP inserindo a UF, a Cidade e o Logradouro (mínimo de 3 caracteres). Exibe uma lista interativa de resultados compatíveis onde o usuário pode clicar sobre a etiqueta de CEP para copiá-la instantaneamente.
+
+![Interface de Busca por Endereço](assets/buscaporendereco.webp)
+
+---
 
 ## 🚀 Tecnologias Utilizadas
 
-- **HTML5**: Estruturação semântica e acessível.
-- **CSS3 (Vanilla)**: Design system customizado, responsividade mobile-first, variáveis CSS (custom properties) e animações/transições fluidas.
-- **JavaScript (Vanilla JS)**: Lógica pura estruturada com manipulação segura do DOM.
-- **API ViaCEP**: Integração contínua e sem necessidade de chaves/autenticação para consulta de dados postais.
+- **HTML5**: Estruturação semântica, acessível e otimizada.
+- **CSS3 (Vanilla)**: Design system customizado com variáveis CSS, responsividade mobile-first, transições de opacidade e cores (fade de 0.25s) para alternância de temas.
+- **JavaScript (Vanilla JS)**: Lógica pura estruturada sem frameworks externos, garantindo máxima performance de renderização.
+- **API ViaCEP**: Integração ágil e sem necessidade de chaves de autenticação para consulta de dados postais.
 
 ## ✨ Recursos e Funcionalidades
 
-- **Busca por CEP (Máscara Automática)**: Input com máscara dinâmica (`XXXXX-XXX`) que dispara a consulta automaticamente assim que o oitavo dígito é preenchido.
-- **Busca por Endereço**: Permite filtrar por Estado (UF), Cidade e Logradouro, listando todos os endereços compatíveis e seus respectivos CEPs.
-- **Debounce de Digitação**: Mecanismo inteligente que atrasa as requisições à API durante a digitação ativa do usuário, economizando largura de banda e evitando limites de taxa (rate limits).
-- **Segurança Avançada (Anti-XSS)**: Sanitização estrita de todos os dados recebidos da API antes de serem renderizados no DOM, utilizando exclusivamente `textContent` e APIs nativas de criação de elementos.
-- **Feedback Visual (Loading & Erros)**: Spinners animados dinâmicos que indicam o progresso da busca e tratamentos amigáveis para falhas comuns (como "CEP não encontrado" ou "Sem conexão").
-- **Cópia Rápida**: Botões e distintivos que copiam o CEP diretamente para a área de transferência com um único clique (ou teclado), exibindo confirmação visual temporária ("Copiado!").
+- **Busca por CEP com Máscara Dinâmica**: Campo de entrada inteligente com formatação automática (`XXXXX-XXX`) que efetua a requisição no instante em que o oitavo dígito é inserido.
+- **Busca por Endereço Avançada**: Grade de formulário otimizada que divide proporcionalmente a linha entre UF e Cidade, deixando o Logradouro em destaque e tela cheia.
+- **Debounce de Digitação**: Atraso inteligente nas requisições (400ms para CEP e 600ms para endereço) que evita requisições excessivas à API à medida que o usuário digita.
+- **Segurança Rigorosa (Anti-XSS & Path Traversal)**:
+  * Sanitização completa de dados com remoção de caracteres especiais (`/`, `\`, `.`) para impedir injeção de caminhos nas URLs.
+  * Validações por expressões regulares (Regex) para formato de CEP e UF.
+  * Manipulação estrita do DOM através de `textContent` e `replaceChildren()` (zero uso de `innerHTML`).
+- **Facilidade operacional (Auto-Select & Reset)**:
+  * Auto-seleção de texto ao focar nos inputs para facilitar novas digitações sobrepostas.
+  * Botões internos de limpeza rápida ("×") para limpar os campos e resetar resultados instantaneamente.
+- **Persistência de Tema**: Detecção automática da preferência de cores do sistema do usuário com opção de alternância manual e persistência via `localStorage`.
 
 ## 💻 Como Executar o Projeto
 
-Como o projeto é construído totalmente em tecnologias front-end puras (Vanilla), sua execução é extremamente simples:
+Como a aplicação é estática e depende exclusivamente de tecnologias web nativas, sua execução local é extremamente simples:
 
-### Método 1: Direto no Navegador
-1. Clone ou faça o download dos arquivos em sua máquina local.
-2. Dobre o clique no arquivo `index.html` para abri-lo diretamente em qualquer navegador moderno.
+### Método 1: Execução Direta
+1. Faça o download ou clone o repositório em sua máquina.
+2. Abra o arquivo `index.html` em qualquer navegador web moderno.
 
-### Método 2: Usando um Servidor de Desenvolvimento Local (Recomendado)
-Se preferir rodar com suporte a hot reload ou simular um servidor real de produção:
+### Método 2: Servidor Local (Recomendado)
+Para simular um ambiente de produção real com suporte a chamadas HTTP otimizadas, execute na pasta do projeto:
 ```bash
-# Executar utilizando o python
+# Utilizando Python
 python -m http.server 8000
 
-# Ou utilizando o node.js (npx)
+# Ou utilizando Node.js (npx)
 npx serve
 ```
-Abra o navegador em `http://localhost:8000` (ou a porta correspondente).
+Acesse a aplicação em `http://localhost:8000` (ou na porta configurada pelo terminal).
+
+---
 
 > ⚠️ **IMPORTANTE (Divergência ou Dúvidas sobre Dados de Endereço):**  
-> Como a API pública do ViaCEP depende de atualizações periódicas da base de dados postal, é possível que haja um pequeno atraso (delay) em relação ao sistema oficial dos Correios. Em caso de dúvidas sobre a atualização ou exatidão de um logradouro/CEP recente, recomendamos consultar diretamente a ferramenta oficial no [Busca CEP Correios](https://buscacepinter.correios.com.br/app/endereco/index.php?t), que sempre conterá as informações mais recentes e em tempo real.
+> Como a API pública do ViaCEP depende de atualizações periódicas da base de dados postal, é possível que ocorra um pequeno atraso (delay) em relação ao sistema oficial dos Correios. Em caso de dúvidas sobre a exatidão de um logradouro recente, consulte diretamente a ferramenta oficial no [Busca CEP Correios](https://buscacepinter.correios.com.br/app/endereco/index.php?t), que conterá sempre as informações oficiais e em tempo real.
 
 ---
 
 > ℹ️ **NOTA:**  
 > **Ferramenta desenvolvida por Adriano Giassi com o auxílio de Inteligência Artificial para otimização de rotinas operacionais.**
-
